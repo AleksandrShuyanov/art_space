@@ -1,3 +1,8 @@
 <resources>
+    <string name="btn_prev">Назад</string>
+    <string name="btn_next">Далее</string>
     <string name="app_name">Art Space</string>
+    <string name="art_name_1">Алёнушка</string>
+    <string name="art_author_1">Виктор Васнецов</string>
+    <string name="art_year_1">1881</string>
 </resources>
