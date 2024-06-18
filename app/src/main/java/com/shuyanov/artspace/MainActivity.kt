@@ -7,12 +7,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -24,8 +28,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -71,26 +75,45 @@ fun ViewSlide(
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier
-            .background(Color.White)
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
             .fillMaxHeight()
+            .verticalScroll(rememberScrollState())
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
+                .padding(12.dp, 0.dp, 12.dp, 0.dp)
                 .weight(1f)
+                .width(IntrinsicSize.Max)
         ) {
             // Item content
+
+            val configuration = LocalConfiguration.current
+            val screenHeight = configuration.screenHeightDp.dp
+            val screenWidth = configuration.screenWidthDp.dp
+
+            var modifierImageCol = Modifier
+                .padding(bottom = 12.dp)
+                .fillMaxWidth()
+
+            if (screenWidth > screenHeight) {
+                modifierImageCol = modifierImageCol.fillMaxHeight(0.7f)
+            }
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
+                modifier = modifierImageCol
             ) {
+                // Image
                 Surface(
                     shadowElevation = 15.dp,
                     modifier = Modifier
-                        .padding(26.dp)
+                        .fillMaxWidth()
                 ) {
                     Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .padding(25.dp)
                     ) {
@@ -99,7 +122,6 @@ fun ViewSlide(
                             contentDescription = activeArtItem.title,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
-                                .fillMaxWidth()
                         )
                     }
 
@@ -110,21 +132,20 @@ fun ViewSlide(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(25.dp, 0.dp, 25.dp, 0.dp)
             ) {
                 // Text block
 
                 Column(
                     modifier = Modifier
                         .background(colorResource(id = R.color.label_bg))
-                        .fillMaxWidth()
                         .padding(15.dp)
+                        .fillMaxWidth()
                 ) {
                     TextLabel(
                         activeArtItem.title,
                         fontWeight = FontWeight.Normal,
                     )
-                    Row() {
+                    Row(modifier = Modifier) {
                         TextLabel(
                             activeArtItem.author,
                             fontWeight = FontWeight.Bold,
@@ -144,7 +165,7 @@ fun ViewSlide(
 
         Column(
             modifier = modifier
-                .padding(25.dp)
+                .padding(25.dp, 0.dp, 25.dp, 10.dp)
         ) {
             // Buttons block
 
@@ -214,7 +235,8 @@ fun NavigateButton(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true)
 @Composable
 fun GreetingPreview() {
     ArtSpaceTheme {
